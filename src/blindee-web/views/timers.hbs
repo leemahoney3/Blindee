@@ -1,0 +1,114 @@
+{{> menu id="timers" }}
+
+<div class="ui segment">
+    <div class="ui grid container">
+        <div class="center aligned sixteen wide column">
+            <h3>Main Blind Timers</h3>
+
+            <p><b>Please Note:</b> These timers run every day.</p>
+            <div class="ui divider"></div>
+            <table class="ui unstackable table" id="timersTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Action</th>
+                        <th>Time</th>
+                        <th>Manage</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+
+                  </tbody>
+             </table>
+
+            <div class="ui divider"></div>
+             <h3>Add A new Timer</h3>
+
+             <form action="/timers/" method="post" class="ui form">
+                <div class="field">
+                    <label for="timerTime">At the Time</label>
+                    <input type="text" name="timerTime" id="timerTime" placeholder="hh:mm (14:54)">
+                </div>
+                <div class="field">
+                    <label for="timerAction">I want to</label>
+                    <select name="timerAction" id="timerAction" class="ui fluid dropdown">
+                        <option value="">Please Select...</option>
+                        <option value="open">Open the Blind</option>
+                        <option value="close">Close the Blind</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <button class="ui button" name="timerSubmit" id="timerSubmit">Add Timer</button>
+                </div>
+             </form>
+
+
+            <script>
+
+                $(document).ready(function () {
+
+                    $.post('http://blindeeiot.ddns.net/api/', {secret: 'ilikecats', action: 'get-timers'}, function (data) {
+
+                        //let json = JSON.parse(data);
+                        $.each(data, function(i, v) {
+                            $('<tr/>', {
+                                html: [$('<td/>', {
+                                    text: v.id
+                                }),
+                                $('<td/>', {
+                                    text: (v.action == 'open') ? 'Open Blind' : 'Close Blind'
+                                }), $('<td/>', {
+                                    text: v.time
+                                }), $('<td/>', {
+                                    html: "<a class='ui active button' href='#' onClick='event.preventDefault(); deleteTimer(" + v.id + ")'><i class='icon trash'></i>Delete</a>"
+                                })]
+                            }).appendTo('#timersTable tbody')
+                        });
+
+                    }, "json");
+
+                });
+
+                $('#timerSubmit').on('click', function (e) {
+
+                    e.preventDefault();
+
+                    const timerTime = $('#timerTime').val();
+                    const timerAction = $('#timerAction').val();
+
+                    if (timerTime != '' && timerAction != '') {
+
+
+                        $.ajax({
+                            type: "POST",
+                            url: "http://blindeeiot.ddns.net/api/",
+                            data: { "secret": "ilikecats", "action": "set-timer", "time": timerTime, "timerAction": timerAction },
+                            success: function (res) {
+                                console.log(res);
+                                location.reload();
+                            }
+                        });
+
+
+                    }
+
+                });
+
+                function deleteTimer(timerId) {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "http://blindeeiot.ddns.net/api/",
+                        data: { "secret": "ilikecats", "action": "delete-timer", "timer-id": timerId },
+                        success: function (res) {
+                            console.log(res);
+                            location.reload();
+                        }
+                    });
+
+                }
+
+            </script>
+        </div>
+    </div>
+</div>

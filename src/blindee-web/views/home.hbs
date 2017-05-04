@@ -1,0 +1,69 @@
+{{> menu id="home" }}
+
+<div class="ui segment">
+    <div class="ui grid container">
+        <div class="center aligned sixteen wide column">
+            <h3>Main Blind</h3>
+            <p>Blind is currently <strong class="response">OPEN</strong></p>
+            <br />
+
+            <form action="/" method="post" class="ui form">
+                <div class="field">
+                    <button class="massive ui green button" id="openBlind" name="openBlind">Open Blind</button>
+                </div>
+                <div class="field">
+                    <button class="massive ui red button" id="closeBlind" name="closeBlind">Close Blind</button>
+                </div>
+            </form>
+            <script>
+
+                $('#openBlind').on('click', function (e) {
+
+                    e.preventDefault();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "http://blindeeiot.ddns.net/api/",
+                        data: { "secret": "ilikecats", "action": "open" },
+                        success: function (res) {
+                            console.log(res);
+                        }
+                    });
+
+                });
+
+                $('#closeBlind').on('click', function (e) {
+
+                    e.preventDefault();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "http://blindeeiot.ddns.net/api/",
+                        data: { "secret": "ilikecats", "action": "close" },
+                        success: function (res) {
+                            console.log(res);
+                        }
+                    });
+
+                });
+
+                function checkStatus() {
+
+                    $.ajax({
+                        type: "POST",
+                        url: "http://blindeeiot.ddns.net/api/",
+                        data: { "secret": "ilikecats", "action": "blind-status" },
+                        success: function (res) {
+                            $('.response').html(res);
+                        }
+                    });
+
+                }
+
+
+                setInterval(checkStatus, 1000);
+
+            </script>
+        </div>
+    </div>
+</div>

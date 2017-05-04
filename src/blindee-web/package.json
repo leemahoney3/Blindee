@@ -1,0 +1,28 @@
+{
+    "name": "Blindee-Web",
+    "version": "0.0.1",
+    "description": "IoT Project Semester 2 - Web Client for Automated Blind Controller",
+    "main": "app.js",
+    "dependencies": {
+        "body-parser": "^1.17.1",
+        "express": "^4.15.2",
+        "express-handlebars": "^3.0.0",
+        "path": "^0.12.7"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/leemahoney3/Blindee"
+    },
+    "keywords": [
+        "blindee",
+        "web",
+        "automated",
+        "blind"
+    ],
+    "author": "Lee Mahoney",
+    "license": "ISC"
+}
